@@ -21,10 +21,14 @@ Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login'])
 
 //Protecting Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/profile', function(Request $request) {
-        return auth()->user();
-    });
-
     // API route for logout user
     Route::post('/logout', [App\Http\Controllers\API\AuthController::class, 'logout']);
+    // API Equipment routes
+    Route::get('/equipment', [App\Http\Controllers\API\Equipment::class, 'index']);
+    Route::post('/equipment', [App\Http\Controllers\API\Equipment::class, 'store']);
+    Route::get('/equipment/{id}', [App\Http\Controllers\API\Equipment::class, 'show']);
+    Route::match(['put', 'patch'],'/equipment/{id}', [App\Http\Controllers\API\Equipment::class, 'update']);
+    Route::delete('/equipment/{id}', [App\Http\Controllers\API\Equipment::class, 'destroy']);
+    // API EquipmentType route
+    Route::get('/equipment-type', [App\Http\Controllers\API\EquipmentType::class, 'index']);
 });
