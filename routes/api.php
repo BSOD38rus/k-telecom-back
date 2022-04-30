@@ -23,12 +23,12 @@ Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login'])
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // API route for logout user
     Route::post('/logout', [App\Http\Controllers\API\AuthController::class, 'logout']);
-    // API Equipment routes
-    Route::get('/equipment', [App\Http\Controllers\API\Equipment::class, 'index']);
-    Route::post('/equipment', [App\Http\Controllers\API\Equipment::class, 'store']);
-    Route::get('/equipment/{id}', [App\Http\Controllers\API\Equipment::class, 'show']);
-    Route::match(['put', 'patch'],'/equipment/{id}', [App\Http\Controllers\API\Equipment::class, 'update']);
-    Route::delete('/equipment/{id}', [App\Http\Controllers\API\Equipment::class, 'destroy']);
-    // API EquipmentType route
-    Route::get('/equipment-type', [App\Http\Controllers\API\EquipmentType::class, 'index']);
+    // API EquipmentController routes
+    Route::get('/equipment', [App\Http\Controllers\API\EquipmentController::class, 'index']);
+    Route::post('/equipment', [App\Http\Controllers\API\EquipmentController::class, 'store']);
+    Route::get('/equipment/{id}', [App\Http\Controllers\API\EquipmentController::class, 'show']);
+    Route::match(['put', 'patch'],'/equipment/{id}', [App\Http\Controllers\API\EquipmentController::class, 'update']);
+    Route::delete('/equipment/{id}', [App\Http\Controllers\API\EquipmentController::class, 'destroy']);
+    // API EquipmentTypeController route
+    Route::get('/equipment-type', [App\Http\Controllers\API\EquipmentTypeController::class, 'index']);
 });

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Equipment\StoreRequest;
+use App\Http\Requests\Equipment\UpdateRequest;
 use Illuminate\Http\Request;
 
-class Equipment extends Controller
+class EquipmentTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +16,7 @@ class Equipment extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -23,7 +25,7 @@ class Equipment extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         //
     }
@@ -46,7 +48,7 @@ class Equipment extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
         //
     }
