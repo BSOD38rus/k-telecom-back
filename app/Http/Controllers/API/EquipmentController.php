@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Equipment\StoreRequest;
+use App\Http\Requests\Equipment\UpdateRequest;
 use Illuminate\Http\Request;
 use App\Models\Equipment;
-use Illuminate\Support\Facades\DB;
 
 class EquipmentController extends Controller
 {
@@ -36,7 +37,7 @@ class EquipmentController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         //
     }
@@ -59,7 +60,7 @@ class EquipmentController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
         //
     }
