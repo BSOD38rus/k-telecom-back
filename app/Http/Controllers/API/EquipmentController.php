@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\StoreRequest;
 use App\Http\Requests\Equipment\UpdateRequest;
+use App\Http\Resources\EquipmentCollection;
+use App\Http\Resources\EquipmentResource;
 use Illuminate\Http\Request;
 use App\Models\Equipment;
 
@@ -28,7 +30,7 @@ class EquipmentController extends Controller
             $result = Equipment::paginate(2);
         }
 
-        return $result;
+        return new EquipmentCollection($result);
     }
 
     /**
@@ -50,7 +52,9 @@ class EquipmentController extends Controller
      */
     public function show($id)
     {
-        //
+        # ToDo перенести в сервис
+        $equipment = Equipment::findOrFail($id);
+        return new EquipmentResource($equipment);
     }
 
     /**
