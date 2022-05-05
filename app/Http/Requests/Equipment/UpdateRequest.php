@@ -26,10 +26,10 @@ class UpdateRequest extends StoreRequest
     {
         # В правилах изменение будут только в серийнике, поэтому возьмем правила из StoreRequest и заменим его
         $rules = array_merge(parent::rules(), [
-            'serial.*' => [
+            'serial' => [
                 'required',
                 Rule::unique('equipments', 'serial')->ignore($this->id),
-                new CheckMask($this->equipment_type_id)
+                new CheckMask(false)
             ]
         ]);
         return $rules;

@@ -4,19 +4,23 @@ namespace App\Rules;
 
 use App\Models\EquipmentType;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\DataAwareRule;
 
-class CheckMask implements Rule
+class CheckMask implements Rule, DataAwareRule
 {
-    public $equipment_type_id;
+    public $massStore;
+
+
+    protected $data = [];
 
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($equipment_type_id)
+    public function __construct(bool $massStore)
     {
-        $this->equipment_type_id = $equipment_type_id;
+        $this->massStore = $massStore;
     }
 
     /**
@@ -26,16 +30,33 @@ class CheckMask implements Rule
      * @param mixed $value
      * @return bool
      */
+
+    public function setData($data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
     public function passes($attribute, $value)
     {
         $result = false;
-        $type = EquipmentType::find($this->equipment_type_id);
+        $equipment_type_id = '';
+        # Проверяем на массовое заполнение
+        if ($this->massStore) {
+            # ничего лучше не предумал как вытащить ключ итерации... Костыль, но рабочий
+            $key = explode('.', $attribute);
+            $key = $key[0];
+            $equipment_type_id = $this->data[$key]['equipment_type_id'];
+        }
+        else $equipment_type_id = $this->data['equipment_type_id'];
+
+        $type = EquipmentType::find($equipment_type_id);
         if ($type !== null) {
             $pattern = $this->createMask($type->mask);
             $result = preg_match($pattern, $value);
             #dd($pattern);
         }
-
         return $result;
     }
 
@@ -60,7 +81,7 @@ class CheckMask implements Rule
         );
 
         $pattern = strtr($mask, $trans);
-        $pattern = "/^".$pattern."$/";
+        $pattern = "/^" . $pattern . "$/";
         return $pattern;
     }
 }

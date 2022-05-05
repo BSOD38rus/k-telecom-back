@@ -7,76 +7,69 @@ use App\Http\Requests\Equipment\StoreRequest;
 use App\Http\Requests\Equipment\UpdateRequest;
 use App\Http\Resources\EquipmentCollection;
 use App\Http\Resources\EquipmentResource;
+use App\Services\EquipmentService;
 use Illuminate\Http\Request;
-use App\Models\Equipment;
 
 class EquipmentController extends Controller
 {
+    protected $service;
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param EquipmentService $service
+     */
+    public function __construct(EquipmentService $service)
+    {
+        $this->service = $service;
+    }
+
+    /**
+     * @param Request $request
+     * @return EquipmentCollection
      */
     public function index(Request $request)
     {
-
-        # TODO Чуть позже загоним в сервис, оставим здесь только response
-        if($request->hasAny(['id', 'equipment_type_id', 'serial', 'note'])){
-            $queries = $request->only(['id', 'equipment_type_id', 'serial', 'note']);
-            $result = Equipment::search($queries)->paginate(2);
-        }
-
-        else {
-            $result = Equipment::paginate(2);
-        }
-
+        $result = $this->service->getRecords($request, 5);
         return new EquipmentCollection($result);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param StoreRequest $request
+     * @return EquipmentCollection
      */
     public function store(StoreRequest $request)
     {
-        //
+        $result = $this->service->saveRecord($request);
+        return (new EquipmentCollection($result));
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return EquipmentResource
      */
     public function show($id)
     {
-        # ToDo перенести в сервис
-        $equipment = Equipment::findOrFail($id);
-        return new EquipmentResource($equipment);
+        $result = $this->service->getRecord($id);
+        return new EquipmentResource($result);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param UpdateRequest $request
+     * @param $id
+     * @return EquipmentResource
      */
     public function update(UpdateRequest $request, $id)
     {
-        //
+        $result = $this->service->updateRecord($request, $id);
+        return new EquipmentResource($result);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return EquipmentResource
      */
     public function destroy($id)
     {
-        //
+        $result = $this->service->deleteRecord($id);
+        return new EquipmentResource($result);
     }
 }

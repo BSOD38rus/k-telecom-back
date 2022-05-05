@@ -31,21 +31,23 @@ class StoreRequest extends FormRequest
         # Проверяем на массовое заполнение по степени вложености ключей
         if (isset($this->serial) or isset($this->equipment_type_id) or isset($this->note)) {
             $rules['equipment_type_id'] = 'required|integer|exists:equipment_types,id';
-            $rules['note'] ='nullable|string|max:255';
+            $rules['note'] = 'nullable|string|max:255';
             $rules['serial'] = 'required|array';
             $rules['serial.*'] = [
                 'required',
                 'unique:equipments,serial',
-                new CheckMask($this->equipment_type_id)
+                new CheckMask(false)
             ];
         } else {
-            $rules['*.equipment_type_id'] = 'required|integer|exists:equipment_types,id';
-            $rules['*.note'] ='nullable|string|max:255';
+            $rules['*.equipment_type_id'] = [
+                'required', 'integer', 'exists:equipment_types,id',
+            ];
+            $rules['*.note'] = 'nullable|string|max:255';
             $rules['*.serial'] = 'required|array';
             $rules['*.serial.*'] = [
                 'required',
                 'unique:equipments,serial',
-                new CheckMask($this->equipment_type_id)
+                new CheckMask(true),
             ];
         }
 

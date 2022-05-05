@@ -21,4 +21,9 @@ class Equipment extends Model
 
         return $query;
     }
+
+    public function equipment_type()
+    {
+        return $this->belongsTo(EquipmentType::class);
+    }
 }
